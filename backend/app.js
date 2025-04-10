@@ -23,7 +23,7 @@ app.use(express.static("public"))
 
 
 // MongoDB connection URI
-const MONGO_URI = 'mongodb://localhost:27017/vega6db';
+const MONGO_URI = 'mongodb://127.0.0.1:27017/vega6db';
 
 // Connect to MongoDB
 mongoose.connect(MONGO_URI)

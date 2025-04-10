@@ -29,11 +29,11 @@ export const signupUser = async (req, res) => {
         }
 
         //hash password
-        const hashedPassword = await bcrypt.hash(password, 10)
+        // const hashedPassword = await bcrypt.hash(password, 10)
 
 
         //extracting path
-        const profileImagePath = req.files?.avatar[0]?.path
+        const profileImagePath = req.files?.profileImage[0]?.path
 
         //create new user
 
