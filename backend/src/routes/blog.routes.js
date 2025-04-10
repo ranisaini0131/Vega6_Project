@@ -6,7 +6,7 @@ import { createBlog, getAllBlogs, updateBlog, deleteBlog } from "../controllers/
 
 const router = Router()
 
-router.post("/createBlog", verifyJWT, isAdmin, uploads.array("avatar", 10), createBlog)
+router.post("/createBlog", verifyJWT, isAdmin, uploads.array("image", 10), createBlog)
 
 router.get("/getAllBlog", verifyJWT, isAdmin, getAllBlogs)
 

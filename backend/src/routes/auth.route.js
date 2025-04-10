@@ -15,6 +15,6 @@ router.post('/signup',
     ]),
     signupUser)
 
-router.post("/login", verifyJWT, loginUser)
+router.post("/login", loginUser)
 
 export default router;

@@ -4,46 +4,61 @@ import { Blog } from '../models/blog.model.js';
 
 export const createBlog = async (req, res) => {
     try {
-        const { title, description, image } = req.body;
 
+        //get user details from frontend
+        const { title, description, image } = req.body
 
+        console.log(req.files, "12")
 
-        if (!(title && description && image)) {
-            return res.status(500).json({
+        //validation
+        if (!(title || description || image)) {
+            return res.status(400).json({
                 status: "failed",
-                message: "Please provide all required information",
+                message: "Please provide all fields",
             })
         }
 
-        const existedPrduct = await Product.findOne({ title })
 
-        if (existedPrduct) {
-            return res
-                .status(400)
-                .json({
-                    status: "failed",
-                    message: "Blog already exists"
-                })
+        //check if user already exists or not
+        const existedBlog = await Blog.findOne({ title })
+
+        if (existedBlog) {
+            return res.status(409).json({
+                status: "failed",
+                message: "Blog already exists"
+            })
         }
 
-        const newBlog = new Blog(req.body);
+        //extracting path
+        const blogImagePath = req.files?.image[0]?.path
+        console.log(blogImagePath, "blog image path")
+
+        //create new blog
+
+        const newBlog = new Blog({
+            title,
+            image: blogImagePath,
+            description
+
+        })
         await newBlog.save()
 
-        return res
-            .status(201)
-            .json({
-                status: "failed",
-                message: "Blog created Successfully",
-                data: newBlog
-            })
 
-    } catch (error) {
-        return res
-            .status(500)
-            .json({
-                status: "success",
-                message: error.message
+        if (!newBlog) {
+            return res.status(500).json({
+                status: 'error',
+                message: "something went wrong while creating the blog"
             })
+        }
+
+        //return response
+        return res.json({
+            status: "success",
+            message: "blog created successfully",
+            newBlog
+        })
+    } catch (error) {
+        console.log(error)
     }
 }
 

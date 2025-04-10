@@ -1,6 +1,12 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { User } from "../models/user.model.js"
+import dotenv from "dotenv"
+
+
+dotenv.config({
+    path: "../.env"
+})
 
 
 export const signupUser = async (req, res) => {
@@ -8,6 +14,8 @@ export const signupUser = async (req, res) => {
 
         //get user details from frontend
         const { email, password, profileImage, role } = req.body
+
+        console.log(req.body, "12")
 
         //validation
         if (!(email || password || profileImage || role)) {
@@ -19,7 +27,7 @@ export const signupUser = async (req, res) => {
 
 
         //check if user already exists or not
-        const existedUser = await User.findOne(email)
+        const existedUser = await User.findOne({ email })
 
         if (existedUser) {
             return res.status(409).json({
@@ -29,9 +37,9 @@ export const signupUser = async (req, res) => {
         }
 
         //hash password
-        // const hashedPassword = await bcrypt.hash(password, 10)
+        const hashedPassword = await bcrypt.hash(password, 10)
 
-
+        console.log(req.files, "34")
         //extracting path
         const profileImagePath = req.files?.profileImage[0]?.path
 
@@ -72,21 +80,20 @@ export const signupUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
     //get user entered data
-    console.log(req.body)
     try {
-        const { username, email, password } = req.body
+        const { email, password } = req.body
 
         //check fields
-        if (!(username || email)) {
+        if (!(email || password)) {
             return res.status(422).json({
                 status: "fail",
-                message: "Please provide username or email"
+                message: "Please provide email or password"
             })
         }
 
         //check existed user
         const user = await User.findOne({
-            $or: [{ username }, { email }]
+            $or: [{ password }, { email }]
         })
 
         if (!user) {
@@ -107,6 +114,7 @@ export const loginUser = async (req, res) => {
             })
         }
 
+        console.log(process.env.ACCESS_TOKEN_SECRET, "klklkl")
 
         //generate token
         const token = jwt.sign(
@@ -124,7 +132,7 @@ export const loginUser = async (req, res) => {
 
         //response to user
         const loggedInUser = await User.findById(user._id).select(
-            "-password -refreshToken"
+            "-password "
         )
 
         //return response 
