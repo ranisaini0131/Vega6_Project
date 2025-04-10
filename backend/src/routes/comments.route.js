@@ -1,21 +1,14 @@
 import { Router } from "express";
 import { uploads } from "../middlewares/multer.middleware.js";
-import { signupUser } from "../controllers/auth.controller.js";
 import { verifyJWT } from "../middlewares/verifyUser.middleware.js";
 import { isAdmin } from "../middlewares/isAdmin.middleware.js"
+import { createComment, getAllComments } from "../controllers/comment.controller.js";
 
 const router = Router()
 
-router.post('/signup',
-    uploads.fields([
-        {
-            name: "profileImage",
-            maxCount: 1
-        }
-    ]),
-    signupUser)
+router.post('/createComment', verifyJWT, createComment)
 
-router.post("/login", verifyJWT, loginUser)
+router.post("/getAllComment", verifyJWT, getAllComments)
 
 export default router;
 

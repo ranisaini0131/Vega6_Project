@@ -1,4 +1,4 @@
-import Blog from '../models/Blog.js';
+import { Blog } from '../models/blog.model.js';
 
 
 
@@ -118,8 +118,6 @@ export const deleteBlog = async (req, res) => {
             })
     }
 }
-
-const mongoose = require('mongoose');
 
 
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { uploads } from "../middlewares/multer.middleware.js";
-import { signupUser } from "../controllers/auth.controller.js";
+import { signupUser, loginUser } from "../controllers/auth.controller.js";
 import { verifyJWT } from "../middlewares/verifyUser.middleware.js";
 import { isAdmin } from "../middlewares/isAdmin.middleware.js"
 

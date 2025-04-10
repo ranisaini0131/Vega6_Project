@@ -65,7 +65,6 @@ export const getAllComments = async (req, res) => {
     }
 };
 
-export default router;
 
 
 
